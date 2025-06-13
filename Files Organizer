@@ -1,0 +1,27 @@
+import os, shutil
+
+download_folder = r"C:\Users\ahmad\Downloads"
+
+file_types = {
+    'Images': ['.jpg', '.png', '.jpeg'],
+    'PDFs': ['.pdf'],
+    'Docs': ['.docx', '.doc', '.txt'],
+    'Others': []
+}
+
+for file in os.listdir(download_folder):
+    full_path = os.path.join(download_folder, file)
+    if os.path.isfile(full_path):
+        ext = os.path.splitext(file)[1].lower()
+        moved = False
+        for folder, extensions in file_types.items():
+            if ext in extensions:
+                dest_folder = os.path.join(download_folder, folder)
+                os.makedirs(dest_folder, exist_ok=True)
+                shutil.move(full_path, os.path.join(dest_folder, file))
+                moved = True
+                break
+        if not moved:
+            other = os.path.join(download_folder, 'Others')
+            os.makedirs(other, exist_ok=True)
+            shutil.move(full_path, os.path.join(other, file))
